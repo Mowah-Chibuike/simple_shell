@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * execute_command - executes command
+ * execute_path- executes command
  * @args: arguments structure
  *
  * Return: void
@@ -102,7 +102,7 @@ int execute_commands(arg_t *args)
  */
 int execute(arg_t *args)
 {
-	int i, exit_status;
+	int exit_status;
 	char *op = NULL, **commands, **dup;
 	coms_t *head;
 
@@ -111,9 +111,7 @@ int execute(arg_t *args)
 	dup = copy_string_array(args->commands);
 	head = get_commands(args, dup);
 	commands = args->commands;
-	for (i = 0; commands[i] != NULL; i++)
-		free(commands[i]);
-	free(args->commands);
+	free_strings_array(commands);
 	while (head != NULL)
 	{
 		commands = head->commands;
@@ -130,18 +128,14 @@ int execute(arg_t *args)
 			exit_status = execute_commands(args);
 		if (exit_status == -1)
 		{
-			for (i = 0; dup[i] != NULL; i++)
-				free(dup[i]);
-			free(dup);
+			free_strings_array(dup);
 			free_coms(&head);
 			return (-1);
 		}
 		op = head->operator;
 		head = head->next;
 	}
-	for (i = 0; dup[i] != NULL; i++)
-		free(dup[i]);
-	free(dup);
+	free_strings_array(dup);
 	free_coms(&head);
 	return (exit_status);
 }

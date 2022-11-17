@@ -44,10 +44,12 @@ typedef struct env
  * @exe: holds the name of the binary file that will launch the shell
  * @command: holds the command passed to the shell to be executed
  * @commands: holds the arguments for the command passed to the shell
+ * @_environ: array of environment variables
  * @environment: the environment of the shell
  * @pathstring: the value of the PATH variable
  * @path: linked list holding the directories in the PATH variable
  * @exit: 0 if program should exit and 1 if program should not
+ * @exit_status: exit status of a program
  */
 typedef struct arguments
 {

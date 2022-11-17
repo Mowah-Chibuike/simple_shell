@@ -75,13 +75,22 @@ env_t *add_env_node(env_t **head, char *var, char *val, arg_t *args)
 	return (temp1);
 }
 
-coms_t *add_coms_node(coms_t **head, char **commands, char *operator, arg_t *args)
+/**
+ * add_coms_node - adds a new to node to a command linked list
+ * @head: pointer to the head of the linked list
+ * @commands: array of commands to be added to the new node
+ * @op: operator in the command
+ * @args: arguments sructure
+ *
+ * Return: pointer to new node added
+ */
+coms_t *add_coms_node(coms_t **head, char **commands, char *op, arg_t *args)
 {
 	coms_t *temp = *head, *temp1;
 	char **new_commands, *new_operator;
 
 	new_commands = copy_string_array(commands);
-	new_operator = _strdup(operator);
+	new_operator = _strdup(op);
 	if (new_commands == NULL)
 	{
 		perror(args->exe);

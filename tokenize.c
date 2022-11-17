@@ -54,6 +54,13 @@ char **extract_commands(char **commands, int *index)
 	return (token);
 }
 
+/**
+ * get_commands - gets commands from and array of commands
+ * @args: argument structure
+ * @commands: array to get commands from
+ *
+ * Return: linked list of commands
+ */
 coms_t *get_commands(arg_t *args, char **commands)
 {
 	int i;

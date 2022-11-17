@@ -106,9 +106,7 @@ int un_set_env(arg_t *args)
 			if (strcmp(head->var, commands[1]) == 0)
 			{
 				args->environment = head->next;
-				free(head->var);
-				free(head->val);
-				free(head);
+				free_env_node(&head);
 			}
 			else
 				while (head->next != NULL)
@@ -117,9 +115,7 @@ int un_set_env(arg_t *args)
 					if (strcmp(node->var, commands[1]) == 0)
 					{
 						head->next = node->next;
-						free(node->var);
-						free(node->val);
-						free(node);
+						free_env_node(&node);
 						break;
 					}
 					head = head->next;

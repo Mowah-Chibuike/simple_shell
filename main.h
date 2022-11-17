@@ -15,7 +15,7 @@ extern char **environ;
 list_t *add_list_node(list_t **head, char *str, arg_t *args);
 env_t *add_env_node(env_t **head, char *var, char *val, arg_t *args);
 void print_list(coms_t *h);
-coms_t *add_coms_node(coms_t **head, char **commands, char *operator, arg_t *args);
+coms_t *add_coms_node(coms_t **head, char **commands, char *op, arg_t *args);
 
 /********* _atoi.c *********/
 int check_string(char *str);
@@ -43,6 +43,8 @@ pid_t execute_command(arg_t *args);
 int execute(arg_t *args);
 
 /********** free.c *************/
+void free_strings_array(char **array);
+void free_env_node(env_t **node);
 void free_all(arg_t *args);
 void free_coms(coms_t **head);
 
