@@ -1,4 +1,5 @@
 #include "main.h"
+#include <signal.h>
 
 /**
  * execute_path- executes command
@@ -12,8 +13,6 @@ pid_t execute_path(arg_t *args)
 	pid_t pid, wpid;
 	char **commands, *command;
 
-	if (args->commands == NULL)
-		return (1);
 	search_path(args);
 	commands = args->commands;
 	command = args->command;
@@ -21,6 +20,7 @@ pid_t execute_path(arg_t *args)
 	if (pid == -1)
 	{
 		perror(args->exe);
+		args->exit = errno;
 		return (1);
 	}
 	else if (pid == 0)
@@ -28,7 +28,7 @@ pid_t execute_path(arg_t *args)
 		if (execve(command, commands, args->_environ) == -1)
 		{
 			perror(args->exe);
-			exit(EXIT_FAILURE);
+			_exit(1);
 		}
 	}
 	else
@@ -39,14 +39,14 @@ pid_t execute_path(arg_t *args)
 			if (wpid == -1)
 			{
 				perror(args->exe);
+				args->exit = errno;
 				return (1);
 			}
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+		args->exit = WEXITSTATUS(status);
 	}
-	free(args->command);
-	args->command = NULL;
-	free(args->commands);
-	args->commands = NULL;
+	if (args->exit == 0)
+		free_strings_array(commands);
 	return (0);
 }
 
@@ -88,9 +88,9 @@ int exec_builtins(arg_t *args)
 int execute_commands(arg_t *args)
 {
 	if (args->commands == NULL)
-		return (1);
+		return (0);
 	if (exec_builtins(args) == 1)
-		return (execute_path(args));
+		execute_path(args);
 	return (args->exit);
 }
 
@@ -104,17 +104,19 @@ int execute(arg_t *args)
 {
 	int exit_status;
 	char *op = NULL, **commands, **dup;
-	coms_t *head;
+	coms_t *head, *temp;
 
+	args->exit = 0;
 	if (args->commands == NULL)
 		return (1);
 	dup = copy_string_array(args->commands);
 	head = get_commands(args, dup);
+	temp = head;
 	commands = args->commands;
 	free_strings_array(commands);
-	while (head != NULL)
+	while (temp != NULL)
 	{
-		commands = head->commands;
+		commands = temp->commands;
 		args->commands = commands;
 		args->command = commands[0];
 		if (op != NULL && (strcmp(op, ";") == 0 || strcmp(op, "||") == 0))
@@ -129,13 +131,13 @@ int execute(arg_t *args)
 		if (exit_status == -1)
 		{
 			free_strings_array(dup);
-			free_coms(&head);
+			free_coms(head);
 			return (-1);
 		}
 		op = head->operator;
-		head = head->next;
+		temp = temp->next;
 	}
 	free_strings_array(dup);
-	free_coms(&head);
+	free_coms(head);
 	return (exit_status);
 }

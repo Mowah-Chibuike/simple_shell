@@ -58,23 +58,20 @@ void free_env(env_t **head)
  *
  * Return: void
  */
-void free_coms(coms_t **head)
+void free_coms(coms_t *head)
 {
-	int i;
 	coms_t *temp;
 	char **commands;
 
-	while (*head != NULL)
+	(void)commands;
+	while (head != NULL)
 	{
-		temp = (*head)->next;
-		commands = (*head)->commands;
-		for (i = 0; commands[i] != NULL; i++)
-			free(commands[i]);
-		free(commands[i]);
-		free((*head)->commands);
-		free((*head)->operator);
-		free(*head);
-		*head = temp;
+		temp = head->next;
+		commands = head->commands;
+		/*free_strings_array(commands);*/
+		free(head->operator);
+		free(head);
+		head = temp;
 	}
 }
 

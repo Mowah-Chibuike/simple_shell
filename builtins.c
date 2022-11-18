@@ -82,6 +82,7 @@ int set_env(arg_t *args)
 	{
 		_dprintf(2, "%s: Usage: setenv VARIABLE VALUE\n", args->exe);
 		args->exit = 1;
+		return (0);
 	}
 	args->exit = 0;
 	return (0);

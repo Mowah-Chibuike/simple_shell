@@ -9,6 +9,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include "structs.h"
+#include <signal.h>
 extern char **environ;
 
 /*-----------------add_list_node.c-------------------------*/
@@ -46,7 +47,7 @@ int execute(arg_t *args);
 void free_strings_array(char **array);
 void free_env_node(env_t **node);
 void free_all(arg_t *args);
-void free_coms(coms_t **head);
+void free_coms(coms_t *head);
 
 /*-------init.c------*/
 arg_t *shell_init(void);

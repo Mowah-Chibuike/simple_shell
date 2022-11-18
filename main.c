@@ -33,7 +33,6 @@ char *read_line(arg_t *args)
  */
 int launch_prompt(arg_t *args)
 {
-	int i;
 	char *line, **commands;
 	int exit_status;
 
@@ -50,16 +49,33 @@ int launch_prompt(arg_t *args)
 				break;
 		}
 		free(line);
-		if (args->commands != NULL)
-		{
-			for (i = 0; commands[i] != NULL; i++)
-				free(commands[i]);
-			free(args->commands);
-		}
 	}
 	free(line);
 	exit_status = args->exit_status;
-	free_all(args);
+	return (exit_status);
+}
+
+/**
+ * non_interactive - runs commands in non interactive mode
+ * @args: arguments structure
+ *
+ * Return: exit status after executing
+ */
+int non_interactive(arg_t *args)
+{
+	char *line, **commands;
+	int exit_status;
+
+	line = read_line(args);
+	commands = get_args(line);
+	if (commands != NULL)
+	{
+		args->commands = commands;
+		args->command = commands[0];
+		execute(args);
+	}
+	free(line);
+	exit_status = args->exit;
 	return (exit_status);
 }
 
@@ -72,17 +88,18 @@ int launch_prompt(arg_t *args)
  */
 int main(int argc, char *argv[])
 {
-	int exit_status;
+	int exit_status, fd;
 	arg_t *args = NULL;
 
-	if (argc != 1)
-	{
-		write(2, "Usage: simple_shell", 19);
-		return (1);
-	}
+	(void)argc;
+	fd = STDIN_FILENO;
 	args = shell_init();
 	args->exe = argv[0];
 	/* launch the prompt and start reading commands */
-	exit_status = launch_prompt(args);
+	if (isatty(fd))
+		exit_status = launch_prompt(args);
+	else
+		exit_status = non_interactive(args);
+	free_all(args);
 	return (exit_status);
 }

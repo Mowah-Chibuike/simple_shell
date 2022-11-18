@@ -75,7 +75,7 @@ coms_t *get_commands(arg_t *args, char **commands)
 		add_coms_node(&head, tokens, operator, args);
 		if (commands[i] != NULL)
 			i++;
-		free(tokens);
+		free_strings_array(tokens);
 	}
 	return (head);
 }
