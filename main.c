@@ -14,11 +14,15 @@ char *read_line(arg_t *args)
 	(void)args;
 	if (getline(&command_line, &n, stdin) == -1)
 	{
-		write(1, "\n", 1);
 		if (errno == 0)
 			exit(EXIT_SUCCESS);
 		else
-			exit(EXIT_FAILURE);
+		{
+			free(command_line);
+			free_all(args);
+			exit(0);
+		}
+		write(1, "\n", 1);
 	}
 	return (command_line);
 }
@@ -65,7 +69,7 @@ int non_interactive(arg_t *args)
 	int exit_status;
 
 	line = read_line(args);
-	while (line != NULL)
+	while (!isatty(STDIN_FILENO))
 	{
 		commands = get_args(line);
 		if (commands != NULL)
@@ -76,6 +80,8 @@ int non_interactive(arg_t *args)
 		}
 		free(line);
 		line = read_line(args);
+		if (line == NULL)
+			break;
 	}
 	free(line);
 	exit_status = args->exit;
