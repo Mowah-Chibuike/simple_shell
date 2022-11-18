@@ -12,6 +12,8 @@ char **get_args(char *command_line)
 	char **tokens = NULL;
 	char *token, *delim = " \n\t\r\a";
 
+	if (command_line == NULL)
+		return (NULL);
 	token = strtok(command_line, delim);
 	if (token == NULL)
 		return (NULL);

@@ -57,26 +57,25 @@ char *file_search(arg_t *args)
  *
  * Return: void
  */
-void search_path(arg_t *args)
+char *search_path(arg_t *args)
 {
-	int i;
-	char *text;
-	char **commands, **dup = args->commands;
+	char *text = NULL;
+	char **commands;
 
-	(void)dup;
-	(void)i;
 	if (access(args->command, F_OK) != 0)
 	{
 		text = file_search(args);
 		if (text != NULL)
 		{
 			commands = copy_string_array(args->commands);
+			free_strings_array(args->commands);
 			free(commands[0]);
 			commands[0] = text;
 			args->command = text;
 			args->commands = commands;
 		}
 	}
+	return (text);
 }
 
 

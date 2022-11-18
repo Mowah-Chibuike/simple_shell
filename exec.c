@@ -13,7 +13,16 @@ pid_t execute_path(arg_t *args)
 	pid_t pid, wpid;
 	char **commands, *command;
 
-	search_path(args);
+	if (access(args->commands[0], F_OK) != 0)
+	{
+		if (search_path(args) == NULL)
+		{
+			_dprintf(2, "%s: %s: Command not found\n", args->exe, args->commands[0]);
+			args->exit_status = args->exit = 1;
+			free_strings_array(args->commands);
+			return (1);
+		}
+	}
 	commands = args->commands;
 	command = args->command;
 	pid = fork();
@@ -28,7 +37,7 @@ pid_t execute_path(arg_t *args)
 		if (execve(command, commands, args->_environ) == -1)
 		{
 			perror(args->exe);
-			_exit(1);
+			_exit(errno);
 		}
 	}
 	else
@@ -39,14 +48,13 @@ pid_t execute_path(arg_t *args)
 			if (wpid == -1)
 			{
 				perror(args->exe);
-				args->exit = errno;
+				args->exit_status = errno;
 				return (1);
 			}
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
-		args->exit = WEXITSTATUS(status);
+		args->exit_status = args->exit = WEXITSTATUS(status);
+		free_strings_array(args->commands);
 	}
-	if (args->exit == 0)
-		free_strings_array(commands);
 	return (0);
 }
 
@@ -58,7 +66,7 @@ pid_t execute_path(arg_t *args)
  */
 int exec_builtins(arg_t *args)
 {
-	int i;
+	int i, ret;
 	char **commands;
 	builtins_t builtin_commands[] = {
 		{"exit", shell_exit},
@@ -73,7 +81,11 @@ int exec_builtins(arg_t *args)
 	for (i = 0; builtin_commands[i].command; i++)
 	{
 		if (_strcmp(commands[0], builtin_commands[i].command) == 0)
-			return (builtin_commands[i].builtin(args));
+		{
+			ret = builtin_commands[i].builtin(args);
+			free_strings_array(commands);
+			return (ret);
+		}
 	}
 
 	return (1);
@@ -116,7 +128,7 @@ int execute(arg_t *args)
 	free_strings_array(commands);
 	while (temp != NULL)
 	{
-		commands = temp->commands;
+		commands = copy_string_array(temp->commands);
 		args->commands = commands;
 		args->command = commands[0];
 		if (op != NULL && (strcmp(op, ";") == 0 || strcmp(op, "||") == 0))
@@ -128,6 +140,8 @@ int execute(arg_t *args)
 		}
 		else
 			exit_status = execute_commands(args);
+		/*if (args->commands != NULL)
+			free_strings_array(commands);*/
 		if (exit_status == -1)
 		{
 			free_strings_array(dup);

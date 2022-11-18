@@ -67,8 +67,7 @@ void free_coms(coms_t *head)
 	while (head != NULL)
 	{
 		temp = head->next;
-		commands = head->commands;
-		/*free_strings_array(commands);*/
+		free_strings_array(head->commands);
 		free(head->operator);
 		free(head);
 		head = temp;

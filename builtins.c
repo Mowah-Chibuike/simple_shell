@@ -11,10 +11,7 @@ int shell_exit(arg_t *args)
 	char **commands = args->commands;
 
 	if (commands[1] == NULL)
-	{
 		args->exit = -1;
-		args->exit_status = 0;
-	}
 	else if (check_string(commands[1]))
 	{
 		if (commands[2] != NULL)
@@ -29,7 +26,7 @@ int shell_exit(arg_t *args)
 	else
 	{
 		_dprintf(2, "%s: Invalid argument passed\n", args->exe);
-		args->exit = 1;
+		args->exit_status = 1;
 	}
 
 	return (0);
@@ -81,10 +78,10 @@ int set_env(arg_t *args)
 	else
 	{
 		_dprintf(2, "%s: Usage: setenv VARIABLE VALUE\n", args->exe);
-		args->exit = 1;
+		args->exit_status = 1;
 		return (0);
 	}
-	args->exit = 0;
+	args->exit_status = 0;
 	return (0);
 }
 
@@ -126,15 +123,15 @@ int un_set_env(arg_t *args)
 		else
 		{
 			_dprintf(2, "%s: %s: No such variable\n", args->exe, commands[1]);
-			args->exit = 1;
+			args->exit_status = 1;
 		}
 	}
 	else
 	{
 		_dprintf(2, "%s: Usage: unsetenv VARIABLE\n", args->exe);
-		args->exit = 1;
+		args->exit_status = 1;
 	}
-	args->exit = 0;
+	args->exit_status = 0;
 	return (0);
 }
 
@@ -154,7 +151,7 @@ int change_dir(arg_t *args)
 	if (get_args_num(args) > 2)
 	{
 		_dprintf(2, "%s: %s: too many arguments\n", args->exe, commands[0]);
-		args->exit = errno;
+		args->exit_status = errno;
 		return (0);
 	}
 	if (directory == NULL)
@@ -166,7 +163,7 @@ int change_dir(arg_t *args)
 	if (ret == -1)
 	{
 		_dprintf(2, "%s: %s: cannot access %s\n", exe, commands[0], commands[1]);
-		args->exit = errno;
+		args->exit_status = errno;
 		free(oldpwd);
 		return (0);
 	}
@@ -178,6 +175,6 @@ int change_dir(arg_t *args)
 	free(node->val);
 	node->val =  oldpwd;
 	re_init_env(args);
-	args->exit = 0;
+	args->exit_status = 0;
 	return (0);
 }

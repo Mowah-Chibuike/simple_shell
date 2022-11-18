@@ -14,14 +14,14 @@ char *read_line(arg_t *args)
 	(void)args;
 	if (getline(&command_line, &n, stdin) == -1)
 	{
-		if (errno == 0)
-			exit(EXIT_SUCCESS);
-		else
+		if (errno != 0)
 		{
 			free(command_line);
 			free_all(args);
 			exit(0);
 		}
+		else
+			exit(EXIT_SUCCESS);
 		write(1, "\n", 1);
 	}
 	return (command_line);
@@ -65,11 +65,12 @@ int launch_prompt(arg_t *args)
  */
 int non_interactive(arg_t *args)
 {
-	char *line, **commands;
+	char *line = NULL, **commands;
 	int exit_status;
+	size_t n = 0;
 
-	line = read_line(args);
-	while (!isatty(STDIN_FILENO))
+	getline(&line, &n, stdin);
+	if (line != NULL)
 	{
 		commands = get_args(line);
 		if (commands != NULL)
@@ -78,13 +79,9 @@ int non_interactive(arg_t *args)
 			args->command = commands[0];
 			execute(args);
 		}
-		free(line);
-		line = read_line(args);
-		if (line == NULL)
-			break;
 	}
 	free(line);
-	exit_status = args->exit;
+	exit_status = args->exit_status;
 	return (exit_status);
 }
 

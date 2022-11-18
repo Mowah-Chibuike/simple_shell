@@ -53,7 +53,7 @@ void free_coms(coms_t *head);
 arg_t *shell_init(void);
 
 /*---------path.c---------------*/
-void search_path(arg_t *arguments);
+char *search_path(arg_t *arguments);
 
 /*--------------------realloc.c----------------*/
 char **_realloc(char **old, int size, char *str);
