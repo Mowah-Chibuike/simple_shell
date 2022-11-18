@@ -11,16 +11,14 @@ char *read_line(arg_t *args)
 	char *command_line = NULL;
 	size_t n = 0;
 
+	(void)args;
 	if (getline(&command_line, &n, stdin) == -1)
 	{
 		write(1, "\n", 1);
 		if (errno == 0)
 			exit(EXIT_SUCCESS);
 		else
-		{
-			perror(args->exe);
 			exit(EXIT_FAILURE);
-		}
 	}
 	return (command_line);
 }
@@ -67,12 +65,17 @@ int non_interactive(arg_t *args)
 	int exit_status;
 
 	line = read_line(args);
-	commands = get_args(line);
-	if (commands != NULL)
+	while (line != NULL)
 	{
-		args->commands = commands;
-		args->command = commands[0];
-		execute(args);
+		commands = get_args(line);
+		if (commands != NULL)
+		{
+			args->commands = commands;
+			args->command = commands[0];
+			execute(args);
+		}
+		free(line);
+		line = read_line(args);
 	}
 	free(line);
 	exit_status = args->exit;
