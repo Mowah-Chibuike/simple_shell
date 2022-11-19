@@ -14,7 +14,7 @@ void get_env(arg_t *args)
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
-		environment = strdup(environ[i]);
+		environment = _strdup(environ[i]);
 		var = strtok(environment, "=");
 		val = strtok(NULL, "");
 		add_env_node(&head, var, val, args);
@@ -56,6 +56,11 @@ void get_path_directories(arg_t *args)
 	char *path = _strdup(args->pathstring);
 	char *token;
 
+	if (path == NULL)
+	{
+		args->path = NULL;
+		return;
+	}
 	token = strtok(path, ":");
 	while (token != NULL)
 	{
