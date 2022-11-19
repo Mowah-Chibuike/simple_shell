@@ -95,9 +95,9 @@ int set_env(arg_t *args)
 		args->exit_status = 1;
 		return (0);
 	}
+	*/
 	args->exit_status = 0;
 	return (0);
-	*/
 }
 
 /**
