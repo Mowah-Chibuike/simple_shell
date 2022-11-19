@@ -88,14 +88,16 @@ int set_env(arg_t *args)
 		}
 		re_init_env(args);
 	}
-	else
-	{
+	/*
+	 * else
+	 * {
 		_dprintf(2, "%s: Usage: setenv VARIABLE VALUE\n", args->exe);
 		args->exit_status = 1;
 		return (0);
 	}
 	args->exit_status = 0;
 	return (0);
+	*/
 }
 
 /**
