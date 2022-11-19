@@ -84,7 +84,7 @@ int set_env(arg_t *args)
 		else
 		{
 			free(node->val);
-			node->val = commands[2];
+			node->val = _strdup(commands[2]);
 		}
 		re_init_env(args);
 	}
