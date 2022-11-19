@@ -2,6 +2,27 @@
 #include <signal.h>
 
 /**
+ * check_path - checks if a file in the path
+ * @args: argument structure
+ *
+ * Return: 1 if fails otherwise 0
+ */
+int check_path(arg_t *args)
+{
+	if (access(args->commands[0], F_OK) != 0)
+	{
+		if (search_path(args) == NULL)
+		{
+			_dprintf(2, "%s: %s: Command not found\n", args->exe, args->commands[0]);
+			args->exit_status = args->exit = 1;
+			free_strings_array(args->commands);
+			return (1);
+		}
+	}
+	return (0);
+}
+
+/**
  * execute_path- executes command
  * @args: arguments structure
  *
@@ -13,16 +34,8 @@ pid_t execute_path(arg_t *args)
 	pid_t pid, wpid;
 	char **commands, *command;
 
-	if (access(args->commands[0], F_OK) != 0)
-	{
-		if (search_path(args) == NULL)
-		{
-			_dprintf(2, "%s: %s: Command not found\n", args->exe, args->commands[0]);
-			args->exit_status = args->exit = 1;
-			free_strings_array(args->commands);
-			return (1);
-		}
-	}
+	if (check_path(args) == 1)
+		return (1);
 	commands = args->commands;
 	command = args->command;
 	pid = fork();
@@ -140,8 +153,6 @@ int execute(arg_t *args)
 		}
 		else
 			exit_status = execute_commands(args);
-		/*if (args->commands != NULL)
-			free_strings_array(commands);*/
 		if (exit_status == -1)
 		{
 			free_strings_array(dup);
