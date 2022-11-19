@@ -9,7 +9,7 @@
 int shell_exit(arg_t *args)
 {
 	char **coms = args->commands;
-	int errors;
+	int errs;
 
 	if (coms[1] == NULL)
 		args->exit = -1;
@@ -19,21 +19,26 @@ int shell_exit(arg_t *args)
 		{
 			args->exit = 1;
 			args->errors += 1;
-			errors = args->errors;
-			_dprintf(2, "%s: %d: Excess arguments passed\n", args->exe, errors);
+			errs = args->errors;
+			_dprintf(2, "%s: %d: Excess arguments passed\n", args->exe, errs);
 			return (0);
 		}
 		args->exit = -1;
 		if (_atoi(coms[1]) >= 0)
 			args->exit_status = _atoi(coms[1]);
 		else
+		{
+			args->errors += 1;
+			errs = args->errors;
+			_dprintf(2, "%s: %d: exit: Illegal number: %s\n", args->exe, errs, coms[1]);
 			args->exit_status = 2;
+		}
 	}
 	else
 	{
 		args->errors += 1;
-		errors = args->errors;
-		_dprintf(2, "%s: %d: exit: Illegal number: %s\n", args->exe, errors, coms[1]);
+		errs = args->errors;
+		_dprintf(2, "%s: %d: exit: Illegal number: %s\n", args->exe, errs, coms[1]);
 		args->exit_status = 2;
 	}
 
