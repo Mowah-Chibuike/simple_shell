@@ -23,3 +23,16 @@ void free_strings_array(char **array)
 		*mem = NULL;
 	}
 }
+
+/**
+ * free_double - frees coms linked list and arrays of strings
+ * @list: coms linked list
+ * @array: array of strings to be freed
+ *
+ * Return: void
+ */
+void free_double(coms_t *list, char **array)
+{
+	free_coms(list);
+	free_strings_array(array);
+}

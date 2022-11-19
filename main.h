@@ -48,6 +48,7 @@ void free_strings_array(char **array);
 void free_env_node(env_t **node);
 void free_all(arg_t *args);
 void free_coms(coms_t *head);
+void free_double(coms_t *list, char **array);
 
 /*-------init.c------*/
 arg_t *shell_init(void);

@@ -134,7 +134,7 @@ int execute_commands(arg_t *args)
 int execute(arg_t *args)
 {
 	int exit_status;
-	char *op = NULL, **commands, **dup;
+	char *op = NULL, **dup;
 	coms_t *head, *temp;
 
 	args->exit = 0;
@@ -143,34 +143,37 @@ int execute(arg_t *args)
 	dup = copy_string_array(args->commands);
 	head = get_commands(args, dup);
 	temp = head;
-	commands = args->commands;
-	free_strings_array(commands);
+	free_strings_array(args->commands);
 	while (temp != NULL)
 	{
-		commands = copy_string_array(temp->commands);
-		args->commands = commands;
-		args->command = commands[0];
-		if (op != NULL && (strcmp(op, ";") == 0 || strcmp(op, "||") == 0))
+		args->commands = copy_string_array(temp->commands);
+		args->command = args->commands[0];
+		if (op != NULL && (strcmp(op, ";") == 0))
 			exit_status = execute_commands(args);
+		else if (op != NULL && strcmp(op, "||") == 0)
+		{
+			if (exit_status != 0)
+				exit_status = execute_commands(args);
+			else
+				free_strings_array(args->commands);
+		}
 		else if (op != NULL && strcmp(op, "&&") == 0)
 		{
 			if (exit_status == 0)
 				exit_status = execute_commands(args);
 			else
-				free_strings_array(commands);
+				free_strings_array(args->commands);
 		}
 		else
 			exit_status = execute_commands(args);
 		if (exit_status == -1)
 		{
-			free_strings_array(dup);
-			free_coms(head);
+			free_double(head, dup);
 			return (-1);
 		}
 		op = head->operator;
 		temp = temp->next;
 	}
-	free_strings_array(dup);
-	free_coms(head);
+	free_double(head, dup);
 	return (exit_status);
 }
