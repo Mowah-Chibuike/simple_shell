@@ -69,8 +69,7 @@ int non_interactive(arg_t *args)
 	int exit_status;
 	size_t n = 0;
 
-	getline(&line, &n, stdin);
-	if (line != NULL)
+	while (getline(&line, &n, stdin) != -1)
 	{
 		commands = get_args(line);
 		if (commands != NULL)
@@ -79,6 +78,9 @@ int non_interactive(arg_t *args)
 			args->command = commands[0];
 			execute(args);
 		}
+		free(line);
+		line = NULL;
+		n = 0;
 	}
 	free(line);
 	exit_status = args->exit_status;
