@@ -18,10 +18,7 @@ char *file_search(arg_t *args)
 	{
 		dir = opendir(temp->directory);
 		if (dir == NULL)
-		{
-			perror(args->exe);
-			exit(EXIT_FAILURE);
-		}
+			continue;
 		errno = 0;
 		content = readdir(dir);
 		while (content != NULL)
@@ -38,12 +35,6 @@ char *file_search(arg_t *args)
 				return (pathname);
 			}
 			content = readdir(dir);
-		}
-		if (errno)
-		{
-			closedir(dir);
-			perror(args->exe);
-			exit(EXIT_FAILURE);
 		}
 		closedir(dir);
 		temp = temp->next;

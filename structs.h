@@ -48,6 +48,7 @@ typedef struct env
  * @environment: the environment of the shell
  * @pathstring: the value of the PATH variable
  * @path: linked list holding the directories in the PATH variable
+ * @errors: number of errors
  * @exit: 0 if program should exit and 1 if program should not
  * @exit_status: exit status of a program
  */
@@ -60,6 +61,7 @@ typedef struct arguments
 	env_t *environment;
 	char *pathstring;
 	list_t *path;
+	int errors;
 	int exit;
 	int exit_status;
 } arg_t;

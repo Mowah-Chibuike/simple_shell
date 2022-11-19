@@ -53,6 +53,36 @@ void decode_string(va_list valist, char **buff, int *n)
 	}
 	*buff = new_buffer;
 }
+/**
+ * decode_int - prints an integer
+ * @valist: va_list object
+ * @buff: buffer to write to
+ * @n: number of charcters in the buffer
+ *
+ * Return: void
+ */
+void decode_int(va_list valist, char **buff, int *n)
+{
+	int i, num = va_arg(valist, int), exp, res[10], sum;
+	char *new_buffer = *buff;
+
+	exp = _pow(10, 9);
+	res[0] = num / exp;
+	for (i = 1; i < 9; i++)
+		res[i] = (num / (exp / _pow(10, i))) % 10;
+	res[i] = num % 10;
+	sum = 0;
+	for (i = 0; i < 10; i++)
+	{
+		sum += res[i];
+		if (sum > 0)
+		{
+			*n += 1;
+			new_buffer = _realoc(new_buffer, *n, (res[i] + '0'));
+		}
+	}
+	*buff = new_buffer;
+}
 
 /**
  * get_spec_func - returns function associated with specifier
@@ -65,6 +95,7 @@ void (*get_spec_func(char c))(va_list, char **, int *)
 	int i;
 	spec_t con_spec[] = {
 		{'s', decode_string},
+		{'d', decode_int},
 		{'\0', NULL}
 	};
 

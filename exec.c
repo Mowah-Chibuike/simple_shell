@@ -9,12 +9,17 @@
  */
 int check_path(arg_t *args)
 {
+	int errors;
+	char *exe = args->exe;
+
 	if (access(args->commands[0], F_OK) != 0)
 	{
 		if (search_path(args) == NULL)
 		{
-			_dprintf(2, "%s: %s: Command not found\n", args->exe, args->commands[0]);
-			args->exit_status = args->exit = 1;
+			args->errors += 1;
+			errors = args->errors;
+			_dprintf(2, "%s: %d: %s: not found\n", exe, errors, args->commands[0]);
+			args->exit_status = args->exit = 127;
 			free_strings_array(args->commands);
 			return (1);
 		}
@@ -50,6 +55,7 @@ pid_t execute_path(arg_t *args)
 		if (execve(command, commands, args->_environ) == -1)
 		{
 			perror(args->exe);
+			args->errors += 1;
 			_exit(errno);
 		}
 	}
@@ -61,7 +67,7 @@ pid_t execute_path(arg_t *args)
 			if (wpid == -1)
 			{
 				perror(args->exe);
-				args->exit_status = errno;
+				args->exit = args->exit_status = errno;
 				return (1);
 			}
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));

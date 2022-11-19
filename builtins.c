@@ -143,15 +143,17 @@ int un_set_env(arg_t *args)
  */
 int change_dir(arg_t *args)
 {
-	int ret;
-	char **commands = args->commands, *directory = commands[1], *oldpwd;
+	int ret, errors;
+	char **coms = args->commands, *directory = coms[1], *oldpwd;
 	char *exe = args->exe, *pwd;
 	env_t *node;
 
 	if (get_args_num(args) > 2)
 	{
-		_dprintf(2, "%s: %s: too many arguments\n", args->exe, commands[0]);
-		args->exit_status = errno;
+		args->errors += 1;
+		errors = args->errors;
+		_dprintf(2, "%s: %s: too many arguments\n", args->exe, errors, coms[0]);
+		args->exit = args->exit_status = errno;
 		return (0);
 	}
 	if (directory == NULL)
@@ -162,8 +164,10 @@ int change_dir(arg_t *args)
 	ret = chdir(directory);
 	if (ret == -1)
 	{
-		_dprintf(2, "%s: %s: cannot access %s\n", exe, commands[0], commands[1]);
-		args->exit_status = errno;
+		args->errors += 1;
+		errors = args->errors;
+		_dprintf(2, "%s: %d: %s: cannot access %s\n", exe, errors, coms[0], coms[1]);
+		args->exit = args->exit_status = errno;
 		free(oldpwd);
 		return (0);
 	}
@@ -175,6 +179,6 @@ int change_dir(arg_t *args)
 	free(node->val);
 	node->val =  oldpwd;
 	re_init_env(args);
-	args->exit_status = 0;
+	args->exit = args->exit_status = 0;
 	return (0);
 }

@@ -47,13 +47,8 @@ env_t *add_env_node(env_t **head, char *var, char *val, arg_t *args)
 	env_t *temp = *head, *temp1;
 	char *new_var, *new_val;
 
-	new_var = strdup(var);
+	new_var = _strdup(var);
 	new_val = _strdup(val);
-	if (new_var == NULL || new_val == NULL)
-	{
-		perror(args->exe);
-		exit(EXIT_FAILURE);
-	}
 	temp1 = (env_t *)malloc(sizeof(env_t));
 	if (temp1 == NULL)
 	{

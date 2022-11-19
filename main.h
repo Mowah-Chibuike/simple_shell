@@ -52,6 +52,9 @@ void free_coms(coms_t *head);
 /*-------init.c------*/
 arg_t *shell_init(void);
 
+/******* integer_operations.c ******/
+int _pow(int x, int y);
+
 /*---------path.c---------------*/
 char *search_path(arg_t *arguments);
 

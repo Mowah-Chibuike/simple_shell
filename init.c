@@ -14,6 +14,8 @@ void get_env(arg_t *args)
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
+		var = NULL;
+		val = NULL;
 		environment = _strdup(environ[i]);
 		var = strtok(environment, "=");
 		val = strtok(NULL, "");
@@ -106,6 +108,6 @@ arg_t *shell_init(void)
 	get_path_string(args);
 	get_path_directories(args);
 	init_env(args);
-	args->exit_status = args->exit = 0;
+	args->errors = args->exit_status = args->exit = 0;
 	return (args);
 }
