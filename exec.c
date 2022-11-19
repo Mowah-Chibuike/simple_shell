@@ -156,6 +156,8 @@ int execute(arg_t *args)
 		{
 			if (exit_status == 0)
 				exit_status = execute_commands(args);
+			else
+				free_strings_array(commands);
 		}
 		else
 			exit_status = execute_commands(args);
