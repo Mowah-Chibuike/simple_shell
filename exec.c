@@ -56,7 +56,7 @@ pid_t execute_path(arg_t *args)
 		{
 			perror(args->exe);
 			args->errors += 1;
-			_exit(errno);
+			_exit(2);
 		}
 	}
 	else
