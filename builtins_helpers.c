@@ -120,8 +120,9 @@ void set_pwd(arg_t *args, char *oldpwd)
 	if (node != NULL)
 	{
 		free(node->val);
-		node->val = oldpwd;
+		node->val = _strdup(oldpwd);
 	}
 	re_init_env(args);
+	free(oldpwd);
 	args->exit = args->exit_status = 0;
 }
