@@ -31,4 +31,5 @@ Requirements
 	- You should have an AUTHORS file at the root of your repository, listing all individuals having contributed content to the repository. Format, see Docker
 
 Description
-- A simple shell
+- This project is a simple clone of a Linux shell that takes in commands from the standard input, interpretes those commands and then passes those commands to the system to perform.
+
