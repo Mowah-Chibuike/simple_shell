@@ -35,6 +35,7 @@ int check_args(arg_t *args, int n);
 env_t *check_env(arg_t *args, char *variable);
 void re_init_env(arg_t *args);
 char *get_env_variable(arg_t *args, char *var);
+void set_pwd(arg_t *args, char *oldpwd);
 
 /*********** _dprintf.c ********/
 int _dprintf(int fd, const char *format, ...);
