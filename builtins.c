@@ -159,9 +159,7 @@ int un_set_env(arg_t *args)
 int change_dir(arg_t *args)
 {
 	int ret, errors;
-	char **coms = args->commands, *directory = coms[1], *oldpwd;
-	char *exe = args->exe, *pwd;
-	env_t *node;
+	char **coms = args->commands, *directory = coms[1], *oldpwd, *exe = args->exe;
 
 	if (get_args_num(args) > 2)
 	{
@@ -172,28 +170,29 @@ int change_dir(arg_t *args)
 		return (0);
 	}
 	if (directory == NULL)
+	{
 		directory = get_env_variable(args, "HOME");
+		if (directory == NULL)
+			directory = get_env_variable(args, "PWD");
+	}
 	else if (strcmp(directory, "-") ==  0)
+	{
 		directory = get_env_variable(args, "OLDPWD");
+		if (directory == NULL)
+			directory = get_env_variable(args, "PWD");
+		_dprintf(1, "%s\n", directory);
+	}
 	oldpwd = getcwd(NULL, 0);
 	ret = chdir(directory);
 	if (ret == -1)
 	{
 		args->errors += 1;
 		errors = args->errors;
-		_dprintf(2, "%s: %d: %s: cannot access %s\n", exe, errors, coms[0], coms[1]);
+		_dprintf(2, "%s: %d: %s: can't cd to %s\n", exe, errors, coms[0], coms[1]);
 		args->exit = args->exit_status = errno;
 		free(oldpwd);
 		return (0);
 	}
-	pwd = getcwd(NULL, 0);
-	node = check_env(args, "PWD");
-	free(node->val);
-	node->val = pwd;
-	node = check_env(args, "OLDPWD");
-	free(node->val);
-	node->val =  oldpwd;
-	re_init_env(args);
-	args->exit = args->exit_status = 0;
+	set_pwd(args, oldpwd);
 	return (0);
 }

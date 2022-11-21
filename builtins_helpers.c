@@ -102,3 +102,23 @@ char *get_env_variable(arg_t *args, char *var)
 	}
 	return (NULL);
 }
+
+/**
+ * set_pwd - sets the PWD and OLDPWD of the environment
+ * @args: argument structure
+ */
+void set_pwd(arg_t *args, char *oldpwd)
+{
+	char *pwd;
+	env_t *node;
+
+	pwd = getcwd(NULL, 0);
+	node = check_env(args, "PWD");
+	free(node->val);
+	node->val = pwd;
+	node = check_env(args, "OLDPWD");
+	free(node->val);
+	node->val =  oldpwd;
+	re_init_env(args);
+	args->exit = args->exit_status = 0;
+}
