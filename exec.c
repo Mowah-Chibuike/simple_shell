@@ -39,6 +39,7 @@ pid_t execute_path(arg_t *args)
 	pid_t pid, wpid;
 	char **commands, *command;
 
+	args->exit = args->exit_status = 0;
 	if (check_path(args) == 1)
 		return (1);
 	commands = args->commands;
@@ -171,7 +172,7 @@ int execute(arg_t *args)
 			free_double(head, dup);
 			return (-1);
 		}
-		op = head->operator;
+		op = temp->operator;
 		temp = temp->next;
 	}
 	free_double(head, dup);
