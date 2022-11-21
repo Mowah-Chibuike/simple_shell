@@ -116,9 +116,12 @@ void set_pwd(arg_t *args, char *oldpwd)
 	node = check_env(args, "PWD");
 	free(node->val);
 	node->val = pwd;
-	node = check_env(args, "OLDPWD");
-	free(node->val);
-	node->val =  oldpwd;
+	if (oldpwd != NULL)
+	{
+		node = check_env(args, "OLDPWD");
+		free(node->val);
+		node->val =  oldpwd;
+	}
 	re_init_env(args);
 	args->exit = args->exit_status = 0;
 }
