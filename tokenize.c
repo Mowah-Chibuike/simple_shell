@@ -86,7 +86,7 @@ char **get_alias_val(char *str)
 {
 	int size = 1;
 	char **tokens = NULL;
-	char *token, *delim = " \"\n\t\r\a";
+	char *token, *delim = " \'\"\n\t\r\a";
 
 	if (str == NULL)
 		return (NULL);
