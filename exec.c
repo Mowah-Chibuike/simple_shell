@@ -89,7 +89,7 @@ int exec_builtins(arg_t *args)
 	int i, ret;
 	char **commands;
 	builtins_t builtin_commands[] = {
-		{"exit", shell_exit},
+		{"exit", shell_exit}, {"alias", handle_alias},
 		{"env", print_env},
 		{"setenv", set_env},
 		{"unsetenv", un_set_env},
@@ -121,6 +121,7 @@ int execute_commands(arg_t *args)
 {
 	if (args->commands == NULL)
 		return (0);
+	check_for_alias(args);
 	if (exec_builtins(args) == 1)
 		execute_path(args);
 	return (args->exit);

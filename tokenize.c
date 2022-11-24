@@ -82,3 +82,23 @@ coms_t *get_commands(arg_t *args, char **commands)
 	return (head);
 }
 
+char **get_alias_val(char *str)
+{
+	int size = 1;
+	char **tokens = NULL;
+	char *token, *delim = " \"\n\t\r\a";
+
+	if (str == NULL)
+		return (NULL);
+	token = strtok(str, delim);
+	if (token == NULL)
+		return (NULL);
+	while (token != NULL)
+	{
+		tokens = _realloc(tokens, size, token);
+		size++;
+		token = strtok(NULL, delim);
+	}
+	tokens = _realloc(tokens, size, NULL);
+	return (tokens);
+}

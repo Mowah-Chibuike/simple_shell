@@ -15,8 +15,13 @@ extern char **environ;
 /*-----------------add_list_node.c-------------------------*/
 list_t *add_list_node(list_t **head, char *str, arg_t *args);
 env_t *add_env_node(env_t **head, char *var, char *val, arg_t *args);
-void print_list(coms_t *h);
+void print_list(alias_t *h);
 coms_t *add_coms_node(coms_t **head, char **commands, char *op, arg_t *args);
+alias_t *add_alias_node(alias_t **head, char *alias, char **val, char *str);
+
+/********* alias.c *********/
+void check_for_alias(arg_t *args);
+int handle_alias(arg_t *args);
 
 /********* _atoi.c *********/
 int check_string(char *str);
@@ -50,6 +55,7 @@ void free_env_node(env_t **node);
 void free_all(arg_t *args);
 void free_coms(coms_t *head);
 void free_double(coms_t *list, char **array);
+void free_alias(alias_t *head);
 
 /*-------init.c------*/
 arg_t *shell_init(void);
@@ -74,5 +80,6 @@ char **copy_string_array(char **main);
 char **get_args(char *command_line);
 char **extract_commands(char **commands, int *index);
 coms_t *get_commands(arg_t *args, char **commands);
+char **get_alias_val(char *str);
 
 #endif /* MAIN_H */

@@ -111,3 +111,39 @@ coms_t *add_coms_node(coms_t **head, char **commands, char *op, arg_t *args)
 	*head = temp;
 	return (temp1);
 }
+
+/**
+ * addd_alias_node - adda a new node to the end of an alias linked list
+ * @head: pointer to the head node of the linked list
+ * @alias: alias command to be added
+ * @val: value of the alias command
+ * @str: the name of the alias and val concatenated with an equality symbol
+ *
+ * Return: pointer to the node add
+ */
+alias_t *add_alias_node(alias_t **head, char *alias, char **val, char *str)
+{
+	alias_t *temp = *head, *temp1;
+	char *new_alias = _strdup(alias), **new_val, *new_str = _strdup(str);
+
+	new_val = copy_string_array(val);
+	if (new_alias == NULL)
+		return (NULL);
+	temp1 = (alias_t *)malloc(sizeof(alias_t));
+	if (temp1 == NULL)
+		return (NULL);
+	temp1->alias = new_alias;
+	temp1->val = new_val;
+	temp1->alias_string = new_str;
+	temp1->next = NULL;
+	if (*head == NULL)
+	{
+		*head = temp1;
+		return (temp1);
+	}
+	while ((*head)->next)
+		*head = (*head)->next;
+	(*head)->next = temp1;
+	*head = temp;
+	return (temp1);
+}

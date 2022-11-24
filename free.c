@@ -82,22 +82,9 @@ void free_coms(coms_t *head)
  */
 void free_all(arg_t *args)
 {
-	int i;
-	char **commands = args->commands;
-	char **_environ = args->_environ;
-	env_t *environment = args->environment;
-	list_t *path = args->path;
-
-	/**
-	 * for (i = 0; commands[i] != NULL; i++)
-	 * free(commands[i]);
-	 * free(commands);
-	*/
-	(void)commands;
-	for (i = 0; _environ[i] != NULL; i++)
-		free(_environ[i]);
-	free(_environ);
-	free_env(&environment);
-	free_path(&path);
+	free_strings_array(args->_environ);
+	free_env(&args->environment);
+	free_path(&args->path);
+	free_alias(args->alias_link);
 	free(args);
 }
