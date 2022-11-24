@@ -104,7 +104,7 @@ void mutate_alias(arg_t *args, char *str)
 		free_strings_array(node->val);
 		free(node->alias_string);
 		node->val = copy_string_array(val);
-		node->alias_string = alias_string;
+		node->alias_string = _strdup(alias_string);
 	}
 	free(cp1);
 	free(temp1);
