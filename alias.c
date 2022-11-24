@@ -6,7 +6,7 @@
  */
 void check_for_alias(arg_t *args)
 {
-	alias_t *temp = args->alias_link;
+	alias_t *temp = args->alias_link, *temp1 = args->alias_link;
 	char *command = args->command, *alias, **val;
 
 	while (temp != NULL)
@@ -15,6 +15,20 @@ void check_for_alias(arg_t *args)
 		if (strcmp(alias, command) == 0)
 		{
 			val = copy_string_array(temp->val);
+			while (temp1 != NULL)
+			{
+				alias = temp1->alias;
+				if (strcmp(alias, val[0]) == 0)
+				{
+					free_strings_array(val);
+					val = copy_string_array(temp1->val);
+					free_strings_array(args->commands);
+					args->commands = val;
+					args->command = val[0];
+					return;
+				}
+				temp = temp->next;
+			}
 			free_strings_array(args->commands);
 			args->commands = val;
 			args->command = val[0];
