@@ -75,6 +75,7 @@ int _strlen(const char *str);
 int _strcmp(char *s1, char *s2);
 char *_strdup(char *str);
 char **copy_string_array(char **main);
+char **concat_strings_array(char **arr1, char **arr2, int n);
 
 /************ tokenize.c *********/
 char **get_args(char *command_line);

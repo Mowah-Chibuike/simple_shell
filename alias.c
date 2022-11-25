@@ -7,7 +7,7 @@
 void check_for_alias(arg_t *args)
 {
 	alias_t *temp = args->alias_link, *temp1 = args->alias_link;
-	char *command = args->command, *alias, **val;
+	char *command = args->command, *alias, **val, **new_commands;
 
 	while (temp != NULL)
 	{
@@ -22,16 +22,20 @@ void check_for_alias(arg_t *args)
 				{
 					free_strings_array(val);
 					val = copy_string_array(temp1->val);
+					new_commands = concat_strings_array(val, args->commands, 1);
 					free_strings_array(args->commands);
-					args->commands = val;
-					args->command = val[0];
+					free_strings_array(val);
+					args->commands = new_commands;
+					args->command = new_commands[0];
 					return;
 				}
 				temp1 = temp->next;
 			}
+			new_commands = concat_strings_array(val, args->commands, 1);
 			free_strings_array(args->commands);
-			args->commands = val;
-			args->command = val[0];
+			free_strings_array(val);
+			args->commands = new_commands;
+			args->command = new_commands[0];
 		}
 		temp = temp->next;
 	}

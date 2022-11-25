@@ -113,7 +113,7 @@ coms_t *add_coms_node(coms_t **head, char **commands, char *op, arg_t *args)
 }
 
 /**
- * addd_alias_node - adda a new node to the end of an alias linked list
+ * add_alias_node - adda a new node to the end of an alias linked list
  * @head: pointer to the head node of the linked list
  * @alias: alias command to be added
  * @val: value of the alias command

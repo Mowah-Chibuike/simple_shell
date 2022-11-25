@@ -80,3 +80,25 @@ char **copy_string_array(char **main)
 	new_array = _realloc(new_array, i, NULL);
 	return (new_array);
 }
+
+/**
+ * concat_strings_array - concatenates arrays of strings
+ * @arr1: first array
+ * @arr2: second array
+ * @n: index of arr2 to begin concatenating from
+ *
+ * Return: concatenates array of strings
+ */
+char **concat_strings_array(char **arr1, char **arr2, int n)
+{
+	int i, j;
+	char **new_array = NULL;
+
+	for (i = 1; arr1[i - 1] != NULL; i++)
+		new_array = _realloc(new_array, i, arr1[i - 1]);
+	if (arr2[n] != NULL)
+		for (j = 1; arr2[j] != NULL; i++, j++)
+			new_array = _realloc(new_array, i, arr2[j]);
+	new_array = _realloc(new_array, i, NULL);
+	return (new_array);
+}

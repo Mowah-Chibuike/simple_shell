@@ -82,6 +82,13 @@ coms_t *get_commands(arg_t *args, char **commands)
 	return (head);
 }
 
+/**
+ * get_alias_val - gets the arguments from a alias string
+ * @str: string containing the valus of an alias
+ *
+ * Return: the array of strings containing extrated arguments from the alias
+ * string
+ */
 char **get_alias_val(char *str)
 {
 	int size = 1;
