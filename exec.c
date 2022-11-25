@@ -122,6 +122,7 @@ int execute_commands(arg_t *args)
 	if (args->commands == NULL)
 		return (0);
 	check_for_alias(args);
+	check_for_variables(args);
 	if (exec_builtins(args) == 1)
 		execute_path(args);
 	return (args->exit);

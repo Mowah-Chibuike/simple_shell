@@ -109,6 +109,7 @@ arg_t *shell_init(void)
 	get_path_directories(args);
 	init_env(args);
 	args->alias_link = NULL;
+	args->shell_pid = getpid();
 	args->errors = args->exit_status = args->exit = 0;
 	return (args);
 }

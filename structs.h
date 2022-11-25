@@ -56,6 +56,7 @@ typedef struct aliases
 /**
  * struct arguments - holds everything that should be passed down to other
  * functions
+ * @shell_pid: process ID of the shell
  * @exe: holds the name of the binary file that will launch the shell
  * @command: holds the command passed to the shell to be executed
  * @commands: holds the arguments for the command passed to the shell
@@ -70,6 +71,7 @@ typedef struct aliases
  */
 typedef struct arguments
 {
+	pid_t shell_pid;
 	char *exe;
 	char *command;
 	char **commands;

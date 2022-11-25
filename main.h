@@ -41,9 +41,11 @@ env_t *check_env(arg_t *args, char *variable);
 void re_init_env(arg_t *args);
 char *get_env_variable(arg_t *args, char *var);
 void set_pwd(arg_t *args, char *oldpwd);
+void check_for_variables(arg_t *args);
 
 /*********** _dprintf.c ********/
 int _dprintf(int fd, const char *format, ...);
+char *_realoc(char *old, int size, char new);
 
 /************ exec.c **********/
 pid_t execute_command(arg_t *args);
