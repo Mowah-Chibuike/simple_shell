@@ -110,6 +110,11 @@ void check_for_variables(arg_t *args)
 					free(args->commands[i]);
 					args->commands[i] = _strdup(new_command);
 				}
+				else
+				{
+					free(args->commands[i]);
+					args->commands[i] = NULL;
+				}
 				free(var);
 			}
 			else
