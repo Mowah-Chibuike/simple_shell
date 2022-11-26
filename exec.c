@@ -143,6 +143,7 @@ int execute(arg_t *args)
 	args->exit = 0;
 	if (args->commands == NULL)
 		return (1);
+	check_comments(args);
 	dup = copy_string_array(args->commands);
 	head = get_commands(args, dup);
 	temp = head;

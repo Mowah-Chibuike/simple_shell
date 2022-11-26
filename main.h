@@ -43,6 +43,9 @@ char *get_env_variable(arg_t *args, char *var);
 void set_pwd(arg_t *args, char *oldpwd);
 void check_for_variables(arg_t *args);
 
+/*********** comments.c ********/
+void check_comments(arg_t *args);
+
 /*********** _dprintf.c ********/
 int _dprintf(int fd, const char *format, ...);
 char *_realoc(char *old, int size, char new);
