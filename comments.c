@@ -11,7 +11,7 @@ void check_comments(arg_t *args)
 
 	for (i = 1; args->commands[i - 1] != NULL; i++)
 	{
-		if (strcmp(args->commands[i - 1], "#") == 0)
+		if (args->commands[i - 1][0] == '#' || strcmp(args->commands[i - 1], "#") == 0)
 			break;
 		new_commands = _realloc(new_commands, i, args->commands[i - 1]);
 	}
