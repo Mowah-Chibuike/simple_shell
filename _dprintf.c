@@ -75,7 +75,7 @@ void decode_int(va_list valist, char **buff, int *n)
 	for (i = 0; i < 10; i++)
 	{
 		sum += res[i];
-		if (sum > 0)
+		if (sum > 0 || i == 9)
 		{
 			*n += 1;
 			new_buffer = _realoc(new_buffer, *n, (res[i] + '0'));
