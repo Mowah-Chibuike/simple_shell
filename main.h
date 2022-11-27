@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include "structs.h"
@@ -61,6 +63,9 @@ void free_all(arg_t *args);
 void free_coms(coms_t *head);
 void free_double(coms_t *list, char **array);
 void free_alias(alias_t *head);
+
+/*********** _getline.c *********/
+ssize_t _getline(char **lineptr, int fd);
 
 /*-------init.c------*/
 arg_t *shell_init(void);
